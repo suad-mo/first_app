@@ -1,96 +1,72 @@
-// import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-
-import '../../models/list_media_new.dart';
-import '../../models/enums/enums.dart';
 import '../../models/item_media.dart';
+import '../../models/list_media_new.dart';
 
-class ScrollMedia extends StatefulWidget {
-  const ScrollMedia(this.typeListMedia, {Key? key}) : super(key: key);
-
-  final String typeListMedia;
+class NewScrollMedia extends StatefulWidget {
+  const NewScrollMedia(this.listMedia, {Key? key}) : super(key: key);
+  final ListMediaNew listMedia;
 
   @override
-  State<ScrollMedia> createState() => _ScrollMediaState();
+  State<NewScrollMedia> createState() => _NewScrollMediaState();
 }
 
-class _ScrollMediaState extends State<ScrollMedia> {
-  late ListMediaNew _list;
-
+class _NewScrollMediaState extends State<NewScrollMedia> {
+  ListMediaNew? _list;
   List<ItemMedia> _items = [];
-  // Future<List<ItemMedia>> Function() f = () async {
-  //   if (_list != null) {
+  bool _isLoad = false;
 
-  //   }
-  //   return _list.fetchMediaItems();
-  // };
-  bool _isLoading = false;
   late CancelableOperation<List<ItemMedia>> _myCancelableFuture;
   late CancelableOperation<void> _updateCancelableFuture;
 
   @override
   void initState() {
-    // TODO: implement initState
     setState(() {
-      _list = ListMediaNew(mediaType: widget.typeListMedia);
-      _myCancelableFuture = CancelableOperation.fromFuture(_future());
+      _list = widget.listMedia;
+      _items.addAll(widget.listMedia.items);
+      _isLoad = true;
+      // _myCancelableFuture = CancelableOperation.fromFuture(_future());
       _updateCancelableFuture = CancelableOperation.fromFuture(_updateItems());
-      //_myCancelableFuture = CancelableOperation.fromFuture(_future());
     });
-    // _items = _list.items;
+    // TODO: implement initState
     super.initState();
   }
 
-  Future<List<ItemMedia>> _future() async {
-    final x = _list;
-    final f = await x.fetchMediaItems();
-    // setState(() {
-    //   _list = x;
-    // });
-
-    return f;
-    // final x = await _list.fetchMediaItems();
-    // setState(() {
-    //   _items = x;
-    // });
-    // return x;
-  }
-
-  // final CancelableOperation<List<ItemMedia>> _myCancelableFuture =
-  //     CancelableOperation.fromFuture(_future(), onCancel: (() {}));
+  // Future<List<ItemMedia>> _future() async {
+  //   final x = await _list.fetchMediaItems();
+  //   // setState(() {});
+  //   return x;
+  // }
 
   Future<void> _updateItems() async {
-    // final x = await _list.fetchMediaItems();
-    // setState(() {
-    //   _items = x;
-    // });
-    await _list.fetchMediaItems();
-    setState(() {});
+    final a = _list;
+    await a?.fetchMediaItems();
+
+    print('_update...');
+    setState(() {
+      _list = a;
+    });
+    return;
   }
 
   @override
   void dispose() {
-    super.dispose();
-    _myCancelableFuture.cancel();
+    //_myCancelableFuture.cancel();
     _updateCancelableFuture.cancel();
-    // CancelableCompleter(onCancel: _future).complete(); // : _future = onCancel;
-    // CancelableCompleter(onCancel: _updateItems).complete();
-    // // setState(() {});
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    //final items = ListMediaProvider().mediaController(context, typeMedia);
     return FutureBuilder<List<ItemMedia>>(
-      future: _future(),
+      future: _list?.fetchMediaItems(),
       //initialData: [],
       builder: (context, snapshot) => !snapshot.hasData
           ? const CircularProgressIndicator()
           : Column(
               children: [
                 AppBar(
-                  title: Text(widget.typeListMedia),
+                  title: Text(widget.listMedia.mediaType),
                   backgroundColor: Theme.of(context).primaryColor,
                   automaticallyImplyLeading: false,
                   actions: [

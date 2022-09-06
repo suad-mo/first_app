@@ -37,7 +37,7 @@ class ItemMedia {
         final genreIds = data['genre_ids'];
         genresTv.forEach((key, value) {
           if (genreIds.contains(key)) {
-            print(value);
+            //print(value);
             genres.add(value);
           }
         });
@@ -53,8 +53,8 @@ class ItemMedia {
         isOK: true,
       );
     } catch (e) {
-      print('ItemMedia.fromJson Error unkown...');
-      print(e.toString());
+      //print('ItemMedia.fromJson Error unkown...');
+      //print(e.toString());
       return ItemMedia(
         id: 0,
         title: '',

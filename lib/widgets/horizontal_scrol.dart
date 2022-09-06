@@ -4,11 +4,14 @@ import 'package:first_app/models/list_media.dart';
 import 'package:first_app/providers/lists/trending_movie_week.dart';
 import 'package:first_app/providers/medias_provider.dart';
 import 'package:first_app/providers/movies/list_type_movies.dart';
+import 'package:first_app/widgets/horizontal_scrol/new_scroll_media.dart';
 import 'package:first_app/widgets/horizontal_scrol/scroll_media.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:first_app/providers/movies/trending_week_movies.dart';
+
+import '../models/list_media_new.dart';
 
 class HorizontalSsroll extends StatelessWidget {
   const HorizontalSsroll({Key? key}) : super(key: key);
@@ -32,8 +35,10 @@ class HorizontalSsroll extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ScrollMedia(ListMediaType.movieNowPlaying),
-            ScrollMedia(ListMediaType.tvAiringToday),
+            const ScrollMedia(ListMediaType.movieNowPlaying),
+            NewScrollMedia(
+                ListMediaNew(mediaType: ListMediaType.movieNowPlaying)),
+            const ScrollMedia(ListMediaType.tvAiringToday),
             HorizontalScrollWidget(popularMovie: popularMovie),
             const SizedBox(
               height: 10,
